@@ -1,0 +1,5 @@
+BUTTON_LOGIN_LOCATOR = "//button[@ng-click='customer()']"
+SELECT_LOGIN_LOCATOR = "//select[@class='form-control ng-pristine ng-untouched ng-valid']"
+SELECT_LOGIN_ALL_OPTIONS_LOCATOR = "//option[@ng-repeat='cust in Customers']"
+SELECT_LOGIN_OPTION_3_LOCATOR = "//option[@value='3']"
+BUTTON_LOGIN_WITH_OPTION_LOCATOR = "//button[@class='btn btn-default']"
