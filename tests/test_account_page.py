@@ -1,14 +1,11 @@
 import allure
-import pytest
-from pages.account_page import AccountPage
-from pages.login_page import LoginPage
 from locators.account_page_locators import *
-from locators.login_page_locators import *
 
 @allure.feature('account_page')
 class TestAccountPage:
     @allure.story('Тест выбора номера аккаунта')
     def test_account_selection(self, login_page_pl, account_page_pl):
+        print(login_page_pl)
         """
         Сценарий: Выбор номера аккаунта
         Шаги авторизации:

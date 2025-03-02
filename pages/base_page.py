@@ -27,8 +27,9 @@ class BasePage:
         return element.inner_text()
 
     def is_visible(self, locator: str) -> bool:
-        is_element = self.page.is_visible(selector=locator)
-        if is_element:
+        button = self.page.locator(locator)
+        is_visible = button.is_visible(timeout=5)
+        if is_visible:
             return True
         else:
             raise Exception('Элемент не отобразился на странице')

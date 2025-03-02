@@ -1,15 +1,14 @@
-import pytest
-from playwright.sync_api import sync_playwright
+from playwright.sync_api import sync_playwright, Page
+
 
 from pages.login_page import LoginPage
 from pages.account_page import AccountPage
 from pages.transactions_page import TransactionsPage
 import pytest
 import allure
-from playwright.sync_api import Page
 
 @pytest.hookimpl(tryfirst=True, hookwrapper=True)
-def pytest_runtest_make_report(item, call):
+def pytest_runtest_makereport(item, call):
     outcome = yield
     rep = outcome.get_result()
 
