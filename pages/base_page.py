@@ -6,8 +6,12 @@ class BasePage:
         self.page = page
         self.url = url
 
-    def open_url(self):
-        self.page.goto(self.url)
+    # def open_url(self):
+    #     self.page.goto(self.url)
+
+    def open_url(self, url: str):
+        self.page.goto(url)
+        # self.page.wait_for_load_state("networkidle")
 
     def check_url(self):
         assert self.page.url == self.url, (
@@ -26,13 +30,21 @@ class BasePage:
         element = self.page.wait_for_selector(selector=locator)
         return element.inner_text()
 
-    def is_visible(self, locator: str) -> bool:
-        button = self.page.locator(locator)
-        is_visible = button.is_visible(timeout=5)
+    # def is_visible(self, locator: str) -> bool:
+    #     button = self.page.locator(locator)
+    #     is_visible = button.is_visible(timeout=5)
+    #     if is_visible:
+    #         return True
+    #     else:
+    #         raise Exception('Элемент не отобразился на странице')
+
+    def is_visible(self, locator: str, timeout: int = 10) -> bool:
+        button = self.page.locator(selector=locator)
+        is_visible = button.is_visible(timeout=timeout * 1000)  # timeout в миллисекундах
         if is_visible:
             return True
         else:
-            raise Exception('Элемент не отобразился на странице')
+            raise Exception(f'Элемент с локатором "{locator}" не отобразился на странице')
 
     def is_clickable(self, locator: str) -> bool:
         is_element = self.page.is_enabled(selector=locator)

@@ -9,7 +9,7 @@ from locators.table_transactions_locators import *
 @allure.feature('transactions_page')
 class TestTransactionsPage:
     @allure.story('Тест отображения таблицы транзакций')
-    def test_transactions_table(self, login_page_pl, account_page_pl, transactions_page_pl):
+    def test_transactions_table(self, page, login_page_pl, account_page_pl, transactions_page_pl):
         """
         Сценарий: Отображение таблицы транзакций
         Шаги авторизации:
@@ -28,7 +28,7 @@ class TestTransactionsPage:
         """
         # Шаги авторизации
         login_page_pl.click_customer_login()
-        login_page_pl.select_user()
+        login_page_pl.select_user("Ron Weasly")
         login_page_pl.click_login()
         print("Авторизация выполнена")
 

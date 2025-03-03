@@ -24,7 +24,7 @@ def pytest_runtest_makereport(item, call):
 @pytest.fixture(scope='session')
 def browser():
     with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
+        browser = p.chromium.launch(headless=False)
         yield browser
         browser.close()
 
@@ -33,6 +33,8 @@ def browser():
 def page(browser):
     page = browser.new_page()
     page.goto(url='https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login')
+    page.wait_for_load_state("networkidle")
+    assert "XYZ Bank" in page.title()
     yield page
     page.close()
 

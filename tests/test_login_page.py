@@ -7,7 +7,7 @@ from locators.login_page_locators import *
 @allure.feature('login_page')
 class TestLoginPage:
     @allure.story('Тест успешной авторизации')
-    def test_successful_login(self, login_page_pl, account_page_pl):
+    def test_successful_login(self, page, login_page_pl, account_page_pl):
         """
         Сценарий: Успешный вход
         Шаги:
@@ -20,8 +20,10 @@ class TestLoginPage:
         7. Кликнуть на кнопку Login.
         8. Проверить, что произошел переход на страницу аккаунта.
         """
+        # login_page_pl.open_url("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login")
 
         # Шаг 1: Проверить, что кнопка Customer Login отображается
+        # button = page.BUTTON_LOGIN_LOCATOR
         assert login_page_pl.is_visible(BUTTON_LOGIN_LOCATOR), (
             "Ожидаемый результат: Кнопка Customer Login отображается. "
             "Фактический результат: Кнопка Customer Login не отобразилась."
@@ -45,7 +47,7 @@ class TestLoginPage:
         )
 
         # Шаг 5: Выбрать в селекте третий вариант
-        login_page_pl.click(SELECT_LOGIN_OPTION_3_LOCATOR)
+        login_page_pl.select_user("Ron Weasly")
         print("Шаг 5: Выбран третий вариант в селекте.")
 
         # Шаг 6: Проверить, что кнопка Login отображается

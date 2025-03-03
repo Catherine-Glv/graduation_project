@@ -4,7 +4,7 @@ from locators.account_page_locators import *
 @allure.feature('account_page')
 class TestAccountPage:
     @allure.story('Тест выбора номера аккаунта')
-    def test_account_selection(self, login_page_pl, account_page_pl):
+    def test_account_selection(self, page, login_page_pl, account_page_pl):
         print(login_page_pl)
         """
         Сценарий: Выбор номера аккаунта
@@ -20,7 +20,7 @@ class TestAccountPage:
         """
         # Шаги авторизации
         login_page_pl.click_customer_login()
-        login_page_pl.select_user()
+        login_page_pl.select_user("Ron Weasly")
         login_page_pl.click_login()
         print("Авторизация выполнена")
 
