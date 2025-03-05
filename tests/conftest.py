@@ -4,7 +4,6 @@ from pages.login_page import LoginPage
 from pages.account_page import AccountPage
 from pages.transaction_page import TransactionPage
 
-
 @pytest.fixture(scope="session")
 def browser():
     with sync_playwright() as p:
@@ -23,11 +22,9 @@ def login_page(page):
     LoginPage(page).open_page()
     return LoginPage(page)
 
-
 @pytest.fixture(scope="function")
 def customer_account_page(page):
     return AccountPage(page)
-
 
 @pytest.fixture(scope="function")
 def transaction_page(page):
@@ -45,42 +42,3 @@ def pytest_runtest_makereport(item, call):
     rep = outcome.get_result()
 
     setattr(item, "rep_" + rep.when, rep)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# @pytest.fixture(scope="function", autouse=True)
-# def screenshot_on_failure(request, page):
-#     yield
-#
-#     if request.node.rep_call.failed:
-#         try:
-#
-#             if not os.path.exists("screenshots"):
-#                 os.makedirs("screenshots")
-#             test_name = f"{request.node.name}-{time.time()}"
-#             screenshot_file = f"screenshots/{test_name}_failed.png"
-#
-#             page.screenshot(path=screenshot_file)
-#             print(f"\nСкриншот сохранен: {screenshot_file}")
-#         except Exception as e:
-#             print(f"Ошибка при создании скриншота: {e}")

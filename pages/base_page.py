@@ -2,7 +2,6 @@ import time
 
 from playwright.sync_api import Page
 
-
 class BasePage:
     def __init__(self, page: Page):
         self.page = page
@@ -39,17 +38,17 @@ class BasePage:
         else:
             raise Exception('Элемент не отобразился на странице')
 
-    def element_is_clickable(self, locator: str) -> bool:
-        if self.page.is_enabled(selector=locator):
-            return True
-        else:
-            raise Exception('Элемент не кликабелен')
-
-    def element_is_disabled(self, locator: str) -> bool:
-        if self.page.is_disabled(selector=locator):
-            return True
-        else:
-            raise Exception('Элемент не активен')
+    # def element_is_clickable(self, locator: str) -> bool:
+    #     if self.page.is_enabled(selector=locator):
+    #         return True
+    #     else:
+    #         raise Exception('Элемент не кликабелен')
+    #
+    # def element_is_disabled(self, locator: str) -> bool:
+    #     if self.page.is_disabled(selector=locator):
+    #         return True
+    #     else:
+    #         raise Exception('Элемент не активен')
 
     def reload_page(self):
         time.sleep(1)
