@@ -3,7 +3,3 @@ class LoginPageLocators:
     CUSTOMER_SELECTOR = "//select[contains(@class, 'form-control')]"
     LOGIN_BUTTON = "//button[@class='btn btn-default']"
     HOME_BUTTON = "//button[@class='btn home']"
-
-    @staticmethod
-    def get_xpath_by_customer_name(customer_name: str) -> str:
-        return f"//option[text()='{customer_name}']"
