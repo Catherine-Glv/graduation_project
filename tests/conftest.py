@@ -1,7 +1,4 @@
-import time
-
 import pytest
-import os
 from playwright.sync_api import sync_playwright
 from pages.login_page import LoginPage
 from pages.account_page import AccountPage
@@ -49,19 +46,41 @@ def pytest_runtest_makereport(item, call):
 
     setattr(item, "rep_" + rep.when, rep)
 
-@pytest.fixture(scope="function", autouse=True)
-def screenshot_on_failure(request, page):
-    yield
 
-    if request.node.rep_call.failed:
-        try:
 
-            if not os.path.exists("screenshots"):
-                os.makedirs("screenshots")
-            test_name = f"{request.node.name}-{time.time()}"
-            screenshot_file = f"screenshots/{test_name}_failed.png"
 
-            page.screenshot(path=screenshot_file)
-            print(f"\nСкриншот сохранен: {screenshot_file}")
-        except Exception as e:
-            print(f"Ошибка при создании скриншота: {e}")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# @pytest.fixture(scope="function", autouse=True)
+# def screenshot_on_failure(request, page):
+#     yield
+#
+#     if request.node.rep_call.failed:
+#         try:
+#
+#             if not os.path.exists("screenshots"):
+#                 os.makedirs("screenshots")
+#             test_name = f"{request.node.name}-{time.time()}"
+#             screenshot_file = f"screenshots/{test_name}_failed.png"
+#
+#             page.screenshot(path=screenshot_file)
+#             print(f"\nСкриншот сохранен: {screenshot_file}")
+#         except Exception as e:
+#             print(f"Ошибка при создании скриншота: {e}")

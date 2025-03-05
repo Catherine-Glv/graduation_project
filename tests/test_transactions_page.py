@@ -15,7 +15,7 @@ class TestTransactions:
         with (allure.step('Переход на страницу с транзакциями')):
             customer_account_page.click_transaction_button()
             time.sleep(5)
-            assert transaction_page.element_is_visible(TransactionPageLocators.TRANSACTION_TABLE), (f'Переход '
+            assert transaction_page.element_is_visible(locator=TransactionPageLocators.TRANSACTION_TABLE), (f'Переход '
                                                                                                     f'не осуществлен')
         with allure.step('Проверка транзакций в списке'):
             transaction_count = transaction_page.get_transaction_count()
@@ -25,11 +25,12 @@ class TestTransactions:
     class TestTransactions:
         @allure.story('Проверка наличия транзакций в таблице')
         def test_transaction_count(self, customer_account_page, transaction_page, login):
-            with (allure.step('Переход на страницу с транзакциями')):
+            with ((allure.step('Переход на страницу с транзакциями'))):
                 customer_account_page.click_transaction_button()
                 time.sleep(5)
-                assert transaction_page.element_is_visible(TransactionPageLocators.TRANSACTION_TABLE), (f'Переход '
-                                                                                                        f'не осуществлен')
+                assert transaction_page.element_is_visible(locator=TransactionPageLocators.TRANSACTION_TABLE),(f'Переход'
+                                                                                                               f' не '
+                                                                                                               f'осуществлен')
             with allure.step('Проверка транзакций в списке'):
                 transaction_count = transaction_page.get_transaction_count()
                 assert transaction_count > 0, 'Список транзакций пуст'
@@ -48,4 +49,4 @@ class TestTransactions:
             customer_account_page.reload_page()
             transaction_page.click_reset()
             transaction_count = transaction_page.get_transaction_count()
-            assert transaction_count == 0, f"Список транзакций не очистился. Кол-во транзакций: {transaction_count}"
+            assert transaction_count == 0, f"Список транзакций не очистился, кол-во транзакций: {transaction_count}"
