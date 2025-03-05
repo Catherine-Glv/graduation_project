@@ -35,9 +35,7 @@ class TestAccountNumber:
             assert expected_account_number == actual_account_number, f"Выбран неверный account number. " \
                                                                      f"Текущий account number: {actual_account_number}"
 
-@allure.feature("Проверка смены account number на предыдущий номер")
-class TestChangeAccountNumber:
-    @allure.story("Успешная смена account_number")
+    @allure.story("Успешная смена account_number на предыдущий номер")
     def test_change_account_number(self, customer_account_page, login):
         with allure.step("Смена account number на предыдущий"):
             expected_account_number = "1007"
