@@ -1,6 +1,5 @@
 import allure
 
-
 @allure.feature("Проверка авторизации")
 class TestLoginPage:
     @allure.story('Проверка успешного входа')

@@ -58,7 +58,6 @@ def screenshot_on_failure(request, page):
 
             if not os.path.exists("screenshots"):
                 os.makedirs("screenshots")
-
             test_name = f"{request.node.name}-{time.time()}"
             screenshot_file = f"screenshots/{test_name}_failed.png"
 

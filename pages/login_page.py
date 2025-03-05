@@ -14,16 +14,16 @@ class LoginPage(BasePage):
             self.click_login_button()
 
     def click_customer_login_button(self) -> None:
-        self.click(LoginPageLocators.CUSTOMER_LOGIN_BUTTON)
+        self.click(locator=LoginPageLocators.CUSTOMER_LOGIN_BUTTON)
 
     def click_login_button(self) -> None:
-        self.click(LoginPageLocators.LOGIN_BUTTON)
+        self.click(locator=LoginPageLocators.LOGIN_BUTTON)
 
     def click_home_button(self) -> None:
-        self.click(LoginPageLocators.HOME_BUTTON)
+        self.click(locator=LoginPageLocators.HOME_BUTTON)
 
     def select_customer(self, customer_name: str) -> bool:
-        self.click(LoginPageLocators.CUSTOMER_SELECTOR)
+        self.click(locator=LoginPageLocators.CUSTOMER_SELECTOR)
         if self.select_element(locator=LoginPageLocators.CUSTOMER_SELECTOR, label=customer_name):
             return True
         else:
