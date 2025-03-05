@@ -1,7 +1,7 @@
 from playwright.sync_api import Page
 
-from locators.table_transactions_locators import *
-from pages.base_page import BasePage
+from Other.locators.table_transactions_locators import *
+from Other.pages.base_page import BasePage
 
 class TransactionsPage(BasePage):
 

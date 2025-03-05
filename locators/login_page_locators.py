@@ -1,7 +1,9 @@
-# BUTTON_LOGIN_LOCATOR = "//button[contains(@class, 'btn-primary') and contains(text(), 'Customer Login')]"
-BUTTON_LOGIN_LOCATOR = "//button[normalize-space()='Customer Login']"
-SELECT_LOGIN_LOCATOR = "#userSelect"
-SELECT_LOGIN_ALL_OPTIONS_LOCATOR = "//option[@ng-repeat='cust in Customers']"
-SELECT_LOGIN_OPTION_3_LOCATOR = "//option[@value='3']"
-# BUTTON_LOGIN_WITH_OPTION_LOCATOR = "//button[@class='btn btn-default']"
-BUTTON_LOGIN_WITH_OPTION_LOCATOR = "//button[normalize-space()='Login']"
+class LoginPageLocators:
+    CUSTOMER_LOGIN_BUTTON = "//button[text()='Customer Login']"
+    CUSTOMER_SELECTOR = "//select[contains(@class, 'form-control')]"
+    LOGIN_BUTTON = "//button[@class='btn btn-default']"
+    HOME_BUTTON = "//button[@class='btn home']"
+
+    @staticmethod
+    def get_xpath_by_customer_name(customer_name: str) -> str:
+        return f"//option[text()='{customer_name}']"

@@ -1,77 +1,51 @@
+import time
 import allure
-import pytest
-from pages.account_page import AccountPage
-from pages.login_page import LoginPage
-from pages.transactions_page import TransactionsPage
-from locators.account_page_locators import *
-from locators.table_transactions_locators import *
 
-@allure.feature('transactions_page')
-class TestTransactionsPage:
-    @allure.story('Тест отображения таблицы транзакций')
-    def test_transactions_table(self, page, login_page_pl, account_page_pl, transactions_page_pl):
-        """
-        Сценарий: Отображение таблицы транзакций
-        Шаги авторизации:
-        1. Нажать кнопку Customer Login.
-        2. Кликнуть по селекту и выбрать в селекте одно из значений для входа.
-        3. Кликнуть на кнопку Login.
-        Шаги после авторизации:
-        1. Нажать на кнопку Transactions на странице аккаунта.
-        2. Проверить переход на страницу с таблицей транзакций.
-        3. Проверить отображение таблицы.
-        4. Проверить отображение строк с транзакциями в таблице.
-        5. Нажать кнопку Reset.
-        6. Проверить, что строки из таблицы очистились.
-        7. Нажать на кнопку Back.
-        8. Проверить, что вернулись на страницу аккаунта.
-        """
-        # Шаги авторизации
-        login_page_pl.click_customer_login()
-        login_page_pl.select_user("Ron Weasly")
-        login_page_pl.click_login()
-        print("Авторизация выполнена")
+from locators.transaction_page_locators import TransactionPageLocators
 
-        # Шаг 1: Нажать на кнопку Transactions на странице аккаунта
-        account_page_pl.click_transactions()
-        print("Шаг 1: Нажата кнопка Transactions.")
+@allure.feature("Проверка таблицы в Transactions")
+class TestTransactions:
+    @allure.story('Проверка наличия транзакций в таблице')
+    def test_transaction_count(self, customer_account_page, transaction_page, login):
+        with (allure.step('Взнос депозита и вывод')):
+            customer_account_page.make_deposit("50")
+            customer_account_page.make_withdrawl("20")
+            time.sleep(5)
 
-        # Шаг 2: Проверить переход на страницу с таблицей транзакций
-        transactions_page_pl.check_url()
-        print("Шаг 2: Переход на страницу с таблицей транзакций выполнен.")
+        with (allure.step('Переход на страницу с транзакциями')):
+            customer_account_page.click_transaction_button()
+            time.sleep(5)
+            assert transaction_page.element_is_visible(TransactionPageLocators.TRANSACTION_TABLE), (f'Переход '
+                                                                                                    f'не осуществлен')
+        with allure.step('Проверка транзакций в списке'):
+            transaction_count = transaction_page.get_transaction_count()
+            assert transaction_count == 2, 'Имеются транзакции'
 
-        # Шаг 3: Проверить отображение таблицы
-        assert transactions_page_pl.is_transaction_table_visible(), (
-            "Ожидаемый результат: Таблица транзакций отображается. "
-            "Фактический результат: Таблица транзакций не отобразилась."
-        )
-        print("Шаг 3: Таблица транзакций отображается.")
+    @allure.feature("Проверка пустой таблицы в Transactions")
+    class TestTransactions:
+        @allure.story('Проверка наличия транзакций в таблице')
+        def test_transaction_count(self, customer_account_page, transaction_page, login):
+            with (allure.step('Переход на страницу с транзакциями')):
+                customer_account_page.click_transaction_button()
+                time.sleep(5)
+                assert transaction_page.element_is_visible(TransactionPageLocators.TRANSACTION_TABLE), (f'Переход '
+                                                                                                        f'не осуществлен')
+            with allure.step('Проверка транзакций в списке'):
+                transaction_count = transaction_page.get_transaction_count()
+                assert transaction_count > 0, 'Список транзакций пуст'
 
-        # Шаг 4: Проверить отображение строк с транзакциями в таблице
-        transactions_page_pl.wait_for_element(TABLE_ROWS_LOCATOR)
-        rows = transactions_page_pl.locator(TABLE_ROWS_LOCATOR).count()
-        assert rows > 0, (
-            f"Ожидаемый результат: Таблица содержит хотя бы одну строку. "
-            f"Фактический результат: Таблица содержит {rows} строк."
-        )
-        print(f"Шаг 4: В таблице отображается {rows} строк транзакций.")
+    @allure.story('Проверка очистки списка транзакций')
+    def test_reset_transactions(self, customer_account_page, transaction_page, login):
+        with (allure.step('Взнос депозита и вывод')):
+            customer_account_page.make_deposit("50")
+            customer_account_page.make_withdrawl("20")
+            time.sleep(5)
 
-        # Шаг 5: Нажать кнопку Reset
-        transactions_page_pl.click_reset()
-        print("Шаг 5: Нажата кнопка Reset.")
+        with allure.step('Переход на страницу с транзакциями'):
+            customer_account_page.click_transaction_button()
 
-        # Шаг 6: Проверить, что строки из таблицы очистились
-        rows_after_reset = transactions_page_pl.locator(TABLE_ROWS_LOCATOR).count()
-        assert rows_after_reset == 0, (
-            f"Ожидаемый результат: Таблица очищена (0 строк). "
-            f"Фактический результат: Таблица содержит {rows_after_reset} строк."
-        )
-        print("Шаг 6: Таблица очищена, строки транзакций отсутствуют.")
-
-        # Шаг 7: Нажать на кнопку Back
-        transactions_page_pl.click_back()
-        print("Шаг 7: Нажата кнопка Back.")
-
-        # Шаг 8: Проверить, что вернулись на страницу аккаунта
-        account_page_pl.check_url()
-        print("Шаг 2: Переход на страницу аккаунта выполнен.")
+        with allure.step('Очистка списка транзакций'):
+            customer_account_page.reload_page()
+            transaction_page.click_reset()
+            transaction_count = transaction_page.get_transaction_count()
+            assert transaction_count == 0, f"Список транзакций не очистился. Кол-во транзакций: {transaction_count}"

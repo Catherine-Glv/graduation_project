@@ -1,65 +1,40 @@
 import allure
-import pytest
-from playwright.sync_api import Page
-from pages.login_page import LoginPage
-from locators.login_page_locators import *
 
-@allure.feature('login_page')
+
+@allure.feature("Проверка авторизации")
 class TestLoginPage:
-    @allure.story('Тест успешной авторизации')
-    def test_successful_login(self, page, login_page_pl, account_page_pl):
-        """
-        Сценарий: Успешный вход
-        Шаги:
-        1. Проверить, что кнопка Customer Login отображается.
-        2. Нажать кнопку Customer Login.
-        3. Проверить, что отображается селект.
-        4. Проверить, что в селекте 5 позиций выбора.
-        5. Выбрать в селекте одно из значений для входа.
-        6. Проверить, что кнопка Login отображается.
-        7. Кликнуть на кнопку Login.
-        8. Проверить, что произошел переход на страницу аккаунта.
-        """
-        # login_page_pl.open_url("https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login")
+    @allure.story('Проверка успешного входа')
+    def test_successful_login(self, login_page, customer_account_page):
+        with allure.step('Выбор пользователя'):
+            login_page.click_customer_login_button()
+            assert login_page.select_customer(customer_name='Ron Weasly')
 
-        # Шаг 1: Проверить, что кнопка Customer Login отображается
-        # button = page.BUTTON_LOGIN_LOCATOR
-        assert login_page_pl.is_visible(BUTTON_LOGIN_LOCATOR), (
-            "Ожидаемый результат: Кнопка Customer Login отображается. "
-            "Фактический результат: Кнопка Customer Login не отобразилась."
-        )
+        with allure.step('Проверка входа под выбранным пользователем'):
+            login_page.click_login_button()
+            expected_customer_name = 'Ron Weasly'
+            actual_customer_name = customer_account_page.get_customer_name()
+            assert expected_customer_name == actual_customer_name, (f'Имя пользователя на странице не соответствует '
+                                                                    f'выбранному. Имя пользователя выбрано:'
+                                                                    f' {actual_customer_name}')
+            print("Проверка входа")
 
-        # Шаг 2: Нажать кнопку Customer Login
-        login_page_pl.click_customer_login()
-        print("Шаг 2: Нажата кнопка Customer Login.")
+    @allure.story('Проверка перехода по клику кнопки Home')
+    def test_move_to_home(self, login_page, customer_account_page, login):
+        with allure.step('Клик по кнопке Home и проверка редиректа на страницу для входа'):
+            login_page.click_home_button()
+            expected_url = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login"
+            actual_url = login_page.get_current_url()
+            assert expected_url == actual_url, f"Редирект произошел на страницу {actual_url}"
+            print("Клик по кнопке Home")
 
-        # Шаг 3: Проверить, что отображается селект
-        assert login_page_pl.is_visible(SELECT_LOGIN_ALL_OPTIONS_LOCATOR), (
-            "Ожидаемый результат: Селект отображается. "
-            "Фактический результат: Селект не отобразился."
-        )
+    @allure.story('Проверка выхода из аккаунта')
+    def test_successful_logout(self, login_page, customer_account_page):
+        login_page.login(customer_name='Harry Potter')
+        print("Авторизация под пользователем Harry Potter")
 
-        # Шаг 4: Проверить, что в селекте 5 позиций выбора
-        options = login_page_pl.locator(SELECT_LOGIN_ALL_OPTIONS_LOCATOR).locator("option")
-        assert options.count() == 5, (
-            f"Ожидаемый результат: В селекте 5 позиций выбора. "
-            f"Фактический результат: В селекте {options.count()} позиций."
-        )
-
-        # Шаг 5: Выбрать в селекте третий вариант
-        login_page_pl.select_user("Ron Weasly")
-        print("Шаг 5: Выбран третий вариант в селекте.")
-
-        # Шаг 6: Проверить, что кнопка Login отображается
-        assert login_page_pl.is_visible(BUTTON_LOGIN_WITH_OPTION_LOCATOR), (
-            "Ожидаемый результат: Кнопка Login отображается. "
-            "Фактический результат: Кнопка Login не отобразилась."
-        )
-
-        # Шаг 7: Кликнуть на кнопку Login
-        login_page_pl.click_login()
-        print("Шаг 7: Нажата кнопка Login.")
-
-        # Шаг 8: Проверить, что произошел переход на страницу аккаунта
-        account_page_pl.check_url()
-        print("Шаг 2: Переход на страницу аккаунта выполнен.")
+        with allure.step('Разлогин из аккаунта'):
+            customer_account_page.logout()
+            current_location = login_page.get_current_url()
+            expected_location = 'https://www.globalsqa.com/angularJs-protractor/BankingProject/#/customer'
+            assert current_location == expected_location, (f'Разлогин не произошел. '
+                                                           f'Фактическая страница расположения: {current_location}')

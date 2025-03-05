@@ -1,21 +1,30 @@
-from playwright.sync_api import Page
-
-from locators.login_page_locators import *
+from locators.login_page_locators import LoginPageLocators
 from pages.base_page import BasePage
 
+
 class LoginPage(BasePage):
+    URL = "https://www.globalsqa.com/angularJs-protractor/BankingProject/#/login"
 
-    def __init__(self, page: Page, url: str):
-        super().__init__(page, url)
+    def open_page(self, url=URL) -> None:
+        self.open_url(url=url)
 
-    def click_customer_login(self):
-        self.click(SELECT_LOGIN_LOCATOR)
+    def login(self, customer_name: str) -> None:
+            self.click_customer_login_button()
+            self.select_customer(customer_name=customer_name)
+            self.click_login_button()
 
-    def select_user(self):
-        self.select_option(SELECT_LOGIN_OPTION_3_LOCATOR)
+    def click_customer_login_button(self) -> None:
+        self.click(LoginPageLocators.CUSTOMER_LOGIN_BUTTON)
 
-    def click_login(self):
-        self.click(BUTTON_LOGIN_LOCATOR)
+    def click_login_button(self) -> None:
+        self.click(LoginPageLocators.LOGIN_BUTTON)
 
-    def is_login_button_visible(self):
-        return self.is_visible(BUTTON_LOGIN_WITH_OPTION_LOCATOR)
+    def click_home_button(self) -> None:
+        self.click(LoginPageLocators.HOME_BUTTON)
+
+    def select_customer(self, customer_name: str) -> bool:
+        self.click(LoginPageLocators.CUSTOMER_SELECTOR)
+        if self.select_element(locator=LoginPageLocators.CUSTOMER_SELECTOR, label=customer_name):
+            return True
+        else:
+            return False

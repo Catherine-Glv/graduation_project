@@ -1,34 +1,58 @@
-from playwright.sync_api import Page
+import time
 
-from locators.account_page_locators import *
 from pages.base_page import BasePage
+from locators.account_page_locators import AccountPageLocators
 
 
 class AccountPage(BasePage):
+    def get_customer_name(self) -> str:
+        return self.get_element_text(AccountPageLocators.CUSTOMER_NAME)
 
-    def __init__(self, page: Page, url: str):
-        super().__init__(page, url)
+    def get_message_text(self) -> str:
+        return self.get_element_text(AccountPageLocators.MESSAGE)
 
-    def select_account(self):
-        self.select_option(select_locator=SELECT_ACCOUNT_NUMBER_LOCATOR, option_locator=SELECT_OPTION_NUMBER_LOCATOR)
+    def get_account_number(self) -> str:
+        return self.get_element_text(AccountPageLocators.ACCOUNT_NUMBER).replace(" ", "")
 
-    def click_transactions(self):
-        self.click(BUTTON_TRANSACTIONS_LOCATOR)
+    def change_account_number(self) -> str:
+        return self.get_element_text(AccountPageLocators.ACCOUNT_NUMBER_1007).replace(" ", "")
 
-    def click_deposit(self):
-        self.click(BUTTON_DEPOSIT_LOCATOR)
+    def click_transaction_button(self) -> None:
+        self.click(AccountPageLocators.TRANSACTIONS_BUTTON)
 
-    def click_withdrawl(self):
-        self.click(BUTTON_WITHDRAWL_LOCATOR)
+    def click_deposit_button(self) -> None:
+        self.click(AccountPageLocators.DEPOSIT_BUTTON)
 
-    def input_deposit_amount(self, amount: str):
-        self.input_text(INPUT_DEPOSIT_WITHDRAWL_LOCATOR)
+    def click_withdrawl_button(self) -> None:
+        self.click(AccountPageLocators.WITHDRAWL_BUTTON)
 
-    def input_withdrawl_amount(self, amount: str):
-        self.input_text(INPUT_DEPOSIT_WITHDRAWL_LOCATOR)
+    def click_submit_deposit(self) -> None:
+        self.click(AccountPageLocators.SUBMIT_DEPOSIT)
 
-    def click_logout(self):
-        self.click(BUTTON_LOGOUT_LOCATOR)
+    def enter_deposit_amount(self, amount) -> None:
+        self.fill_value(locator=AccountPageLocators.AMOUNT_INPUT, value=amount)
 
-    def click_home(self):
-        self.click(BUTTON_HOME_LOCATOR)
+    def logout(self) -> None:
+        self.click(AccountPageLocators.LOGOUT_BUTTON)
+
+    def select_account_number(self, account_number: str) -> bool:
+        self.click(AccountPageLocators.ACCOUNT_SELECTOR)
+        if self.select_element(locator=AccountPageLocators.ACCOUNT_SELECTOR, label=account_number):
+            return True
+        else:
+            return False
+
+    def make_deposit(self, amount: str) -> None:
+        self.click_deposit_button()
+        self.enter_deposit_amount(amount=amount)
+        self.click_submit_deposit()
+
+    def make_withdrawl(self, amount: str) -> None:
+        self.click_withdrawl_button()
+        time.sleep(1)
+        self.enter_deposit_amount(amount=amount)
+        time.sleep(1)
+        self.click_submit_deposit()
+
+    def get_balance(self) -> str:
+        return self.get_element_text(AccountPageLocators.BALANCE)
